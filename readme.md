@@ -1,6 +1,3 @@
-Claro! Vamos remover as seções de contribuição e licença para simplificar o README.
-
-README.md Simplificado
 # Transaction Service
 
 Este projeto é um microsserviço para gerenciar transações financeiras. Ele utiliza Node.js, TypeScript, AWS Lambda, DynamoDB e Terraform para provisionamento de infraestrutura.
@@ -30,8 +27,7 @@ Antes de começar, certifique-se de ter as seguintes ferramentas instaladas no s
     npm install
 
 
-## Executando com LocalStack
-**Iniciar o LocalStack:**
+## Executar o LocalStack
 
 1. Suba o LocalStack usando Docker:
 Certifique-se de que o Docker está em execução e depois execute:
@@ -59,8 +55,8 @@ Inicialize o Terraform no diretório onde o arquivo main.tf está localizado:
     ```bash
     terraform init
 
-Aplique a infraestrutura:
+3. **Aplique a infraestrutura:**
     ```bash
     terraform apply
 
-Confirme a aplicação das mudanças quando solicitado.
+4. **Confirme a aplicação das mudanças quando solicitado.**
