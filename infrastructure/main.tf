@@ -20,6 +20,17 @@ resource "aws_dynamodb_table" "transactions" {
     name = "id"
     type = "S"
   }
+
+  attribute {
+    name = "userId"
+    type = "S"
+  }
+
+  global_secondary_index {
+    name            = "UserIdIndex"
+    hash_key        = "userId"
+    projection_type = "ALL"
+  }
 }
 
 resource "aws_lambda_function" "transaction_handler" {
