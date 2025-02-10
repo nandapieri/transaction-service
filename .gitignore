@@ -1,0 +1,23 @@
+# Node modules
+node_modules/
+
+# Logs
+logs
+*.log
+
+# Diretório de build
+dist/
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de ambiente
+.env
+
+# Diretórios de implantação
+deployment/
+
+# Arquivos de lock
+yarn.lock
+package-lock.json
