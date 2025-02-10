@@ -26,9 +26,15 @@ resource "aws_dynamodb_table" "transactions" {
     type = "S"
   }
 
+  attribute {
+    name = "createdAt"
+    type = "S"
+  }
+
   global_secondary_index {
     name            = "UserIdIndex"
     hash_key        = "userId"
+    range_key       = "createdAt"
     projection_type = "ALL"
   }
 }
