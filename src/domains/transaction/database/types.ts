@@ -18,5 +18,5 @@ export type TransactionQueryResult = QueryResult<Transaction>;
 export type TransactionsDatabase = {
   saveTransaction: (transaction: any) => Promise<void>;
   listTransactions: (userId: string, limit: number, lastEvaluatedKey?: any) => Promise<TransactionQueryResult>;
-  calculateMonthlyBalance: (userId: string, yearMonth: string) => Promise<number>;
+  getMonthlyTransactions: (userId: string, yearMonth: string) => Promise<Transaction[]>;
 };

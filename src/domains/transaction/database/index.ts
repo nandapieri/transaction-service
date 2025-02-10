@@ -63,10 +63,10 @@ export const listTransactions = async (
   }
 };
 
-export const calculateMonthlyBalance = async (
+export const getMonthlyTransactions = async (
   userId: string,
   yearMonth: string
-): Promise<number> => {
+): Promise<Transaction[]> => {
   const params = {
     TableName: TABLE_NAME,
     KeyConditionExpression: "UserId = :userId AND begins_with(CreatedAt, :yearMonth)",
@@ -79,13 +79,12 @@ export const calculateMonthlyBalance = async (
 
   try {
     const result = await dynamoDBClient.send(new QueryCommand(params));
-    const transactions = (result.Items ?? []).map((item: any) => parseTransactionDB(item as TransactionDB));
-    const balance = transactions.reduce((total: number, transaction: Transaction) => total + transaction.amount, 0);
-    return balance;
+    return (result.Items ?? []).map((item: any) => parseTransactionDB(item as TransactionDB));
   } catch (error) {
-    throw new Error("Could not calculate monthly balance");
+    throw new Error("Could not retrieve monthly transactions");
   }
 };
+
 
 export const transactionsDatabase: TransactionsDatabase = {
   saveTransaction: async (transaction: Transaction): Promise<void> => {
@@ -94,7 +93,7 @@ export const transactionsDatabase: TransactionsDatabase = {
   listTransactions: async (userId: string, limit: number, lastEvaluatedKey?: any): Promise<TransactionQueryResult> => {
     return listTransactions(userId, limit, lastEvaluatedKey);
   },
-  calculateMonthlyBalance: async (userId: string, yearMonth: string): Promise<number> => {
-    return calculateMonthlyBalance(userId, yearMonth);
+  getMonthlyTransactions: async (userId: string, yearMonth: string): Promise<Transaction[]> => {
+    return getMonthlyTransactions(userId, yearMonth);
   },
 };
