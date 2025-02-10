@@ -5,7 +5,7 @@ import registerTransaction from "../registerTransaction";
 const mockDatabase: TransactionsDatabase = {
   saveTransaction: jest.fn(),
   listTransactions: jest.fn(),
-  calculateMonthlyBalance: jest.fn(),
+  getMonthlyTransactions: jest.fn(),
 };
 
 describe("registerTransaction", () => {
@@ -52,7 +52,7 @@ describe("registerTransaction", () => {
     const mockDatabase: TransactionsDatabase = {
         saveTransaction: jest.fn().mockRejectedValueOnce(new Error("Save failed")),
         listTransactions: jest.fn(),
-        calculateMonthlyBalance: jest.fn(),
+        getMonthlyTransactions: jest.fn(),
       };
     const register = registerTransaction(mockDatabase);
 

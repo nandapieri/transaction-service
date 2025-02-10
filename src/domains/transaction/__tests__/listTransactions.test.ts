@@ -5,10 +5,13 @@ import { Transaction } from "../types";
 const mockDatabase: TransactionsDatabase = {
   saveTransaction: jest.fn(),
   listTransactions: jest.fn(),
-  calculateMonthlyBalance: jest.fn(),
+  getMonthlyTransactions: jest.fn(),
 };
 
 describe("listTransactions", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   it("should iterate over transactions pages", async () => {
 
     const transactionsPage1: Transaction[] = [
