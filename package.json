@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "build-and-package-nm": "npm run build && mkdir -p deployment && zip -r deployment/package.zip dist node_modules package.json",
     "build-and-package": "npm run build && mkdir -p deployment && zip -r deployment/package.zip dist package.json"
   },
@@ -14,7 +14,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.13.1",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
     "typescript": "^5.7.3"
   },
   "dependencies": {
