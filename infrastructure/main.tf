@@ -14,27 +14,27 @@ provider "aws" {
 resource "aws_dynamodb_table" "transactions" {
   name           = "Transactions"
   billing_mode   = "PAY_PER_REQUEST"
-  hash_key       = "id"
+  hash_key       = "Id"
 
   attribute {
-    name = "id"
+    name = "Id"
     type = "S"
   }
 
   attribute {
-    name = "userId"
+    name = "UserId"
     type = "S"
   }
 
   attribute {
-    name = "createdAt"
+    name = "CreatedAt"
     type = "S"
   }
 
   global_secondary_index {
     name            = "UserIdIndex"
-    hash_key        = "userId"
-    range_key       = "createdAt"
+    hash_key        = "UserId"
+    range_key       = "CreatedAt"
     projection_type = "ALL"
   }
 }
