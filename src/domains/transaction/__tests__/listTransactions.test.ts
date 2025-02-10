@@ -25,7 +25,7 @@ describe("listTransactions", () => {
     // Configuração do mock para retornar duas páginas
     (mockDatabase.listTransactions as jest.Mock)
       .mockResolvedValueOnce({ items: transactionsPage1, lastEvaluatedKey: "page1" })
-      .mockResolvedValueOnce({ items: transactionsPage2, lastEvaluatedKey: null });
+      .mockResolvedValueOnce({ items: transactionsPage2, lastEvaluatedKey: undefined });
 
     const userId = "user-123";
     const limit = 2;
@@ -38,7 +38,7 @@ describe("listTransactions", () => {
 
     expect(results).toEqual([...transactionsPage1, ...transactionsPage2]);
     expect(mockDatabase.listTransactions).toHaveBeenCalledTimes(2);
-    expect(mockDatabase.listTransactions).toHaveBeenCalledWith(userId, limit, null);
+    expect(mockDatabase.listTransactions).toHaveBeenCalledWith(userId, limit, undefined);
     expect(mockDatabase.listTransactions).toHaveBeenCalledWith(userId, limit, "page1");
   });
 

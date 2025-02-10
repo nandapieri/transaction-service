@@ -3,7 +3,7 @@ import { Transaction } from "./types";
 
 const listTransactions = (Database: TransactionsDatabase) => {
   return async function* (userId: string, limit: number): AsyncGenerator<Transaction[]> {
-    let lastEvaluatedKey = null;
+    let lastEvaluatedKey = undefined;
 
     do {
       try {

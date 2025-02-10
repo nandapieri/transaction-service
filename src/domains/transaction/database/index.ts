@@ -38,11 +38,12 @@ export const saveTransaction = async (transaction: Transaction) => {
 export const listTransactions = async (
   userId: string,
   limit: number,
-  lastEvaluatedKey: any = null
+  lastEvaluatedKey: any = undefined
 ): Promise<TransactionQueryResult> => {
   const params: any = {
     TableName: TABLE_NAME,
-    KeyConditionExpression: "UserId = :userId",
+    KeyConditionExpression: "#userId = :userId",
+    ExpressionAttributeNames: { "#userId": "UserId" },
     ExpressionAttributeValues: {
       ":userId": userId,
     },
@@ -59,7 +60,8 @@ export const listTransactions = async (
       lastEvaluatedKey: result.LastEvaluatedKey,
     };
   } catch (error) {
-    throw new Error("Could not list transactions");
+    console.error("Erro real no DynamoDB:", error);
+    throw new Error("Could not list transactions: ");
   }
 };
 
