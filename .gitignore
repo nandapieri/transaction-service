@@ -21,3 +21,8 @@ deployment/
 # Arquivos de lock
 yarn.lock
 package-lock.json
+
+# Terraform files
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup

@@ -1,0 +1,25 @@
+{
+  "name": "transaction-service",
+  "version": "1.0.0",
+  "description": "Service for managing financial transactions",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-and-package-nm": "npm run build && mkdir -p deployment && zip -r deployment/package.zip dist node_modules package.json",
+    "build-and-package": "npm run build && mkdir -p deployment && zip -r deployment/package.zip dist package.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.13.1",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.744.0",
+    "@aws-sdk/client-lambda": "^3.744.0",
+    "@aws-sdk/lib-dynamodb": "^3.744.0"
+  }
+}
