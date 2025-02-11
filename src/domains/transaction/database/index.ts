@@ -5,7 +5,6 @@ import { Transaction } from "../types";
 
 const TABLE_NAME = "Transactions";
 
-// Parser para converter de TransactionDB para Transaction
 const parseTransactionDB = (item: TransactionDB): Transaction => {
   return {
     id: item.Id,
@@ -86,7 +85,6 @@ export const getMonthlyTransactions = async (
     throw new Error("Could not retrieve monthly transactions");
   }
 };
-
 
 export const transactionsDatabase: TransactionsDatabase = {
   saveTransaction: async (transaction: Transaction): Promise<void> => {

@@ -44,11 +44,14 @@ resource "aws_lambda_function" "transaction_handler" {
   handler       = "dist/handlers/transactionHandler.handler"
   runtime       = "nodejs18.x"
   filename      = "${path.module}/../deployment/package.zip"
-  role          = "arn:aws:iam::123456789012:role/service-role/your-role-name"
+  role          = "arn:aws:iam::000000000000:role/lambda-role"
 
   environment {
     variables = {
-      DYNAMODB_TABLE = aws_dynamodb_table.transactions.name
+      DYNAMODB_TABLE = aws_dynamodb_table.transactions.name,
+      AWS_ENDPOINT_URL = "http://host.docker.internal:4566"
+      AWS_ACCESS_KEY_ID = "dummy"
+      AWS_SECRET_ACCESS_KEY = "dummy"
     }
   }
 

@@ -1,6 +1,7 @@
 {
   "name": "transaction-service",
   "version": "1.0.0",
+  "type": "module",
   "description": "Service for managing financial transactions",
   "main": "dist/index.js",
   "scripts": {
