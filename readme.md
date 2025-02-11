@@ -32,7 +32,7 @@ Antes de começar, certifique-se de ter as seguintes ferramentas instaladas no s
 1. Suba o LocalStack usando Docker:
 Certifique-se de que o Docker está em execução e depois execute:
     ```bash
-    docker run --rm -p 4566:4566 -p 4571:4571 localstack/localstack
+    localstack start
 
 
 2. Configure o AWS CLI para usar o LocalStack:
@@ -60,3 +60,46 @@ Inicialize o Terraform no diretório onde o arquivo main.tf está localizado:
     terraform apply
 
 4. **Confirme a aplicação das mudanças quando solicitado.**
+
+5. **Rode o script para inserir dados na tabela.**
+    ```bash
+    node seed.js
+
+6. **Pegue o id da api para podermos fazer testes das rotas.**
+    ```bash
+    aws --endpoint-url=http://localhost:4566 apigateway get-rest-apis
+
+A resposta será algo como o exemplo abaixo. O id que queremos está na propriedade id (fbcf5neikk)
+    ```bash
+    {
+    "items": [
+        {
+            "id": "fbcf5neikk",
+            "name": "TransactionsAPI",
+            "description": "API Gateway for Transactions",
+            "createdDate": "2025-02-11T15:17:36-03:00",
+            "apiKeySource": "HEADER",
+            "endpointConfiguration": {
+                "types": [
+                    "EDGE"
+                ]
+            },
+
+7. **Testes das rotas da api usando cURL.**
+Listar transações
+    ```bash
+    curl -X GET "http://localhost:4566/restapis/<SEU-ID-AQUI>/dev/_user_request_/transactions?userId=user-123&limit=10"
+
+Criar transação
+    ```bash
+    curl -v -X POST "http://localhost:4566/restapis/<SEU-ID-AQUI>/dev/_user_request_/transactions" \
+    -H "Content-Type: application/json" \
+    -d '{
+    "userId": "user-123",
+    "amount": 100,
+    "description": "Test transaction"
+    }'
+
+Calcular saldo do mês de referencia
+    ```bash
+    curl -X GET "http://localhost:4566/restapis/fbcf5neikk/dev/_user_request_/balance?userId=user-123&month=2025-02"
