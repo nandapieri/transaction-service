@@ -51,15 +51,22 @@ Crie um pacote zip para implantação na AWS Lambda:
 
 
 2. **Provisionamento de Infraestrutura**
-Inicialize o Terraform no diretório onde o arquivo main.tf está localizado:
+Inicialize o Terraform no diretório infrastructure:
     ```bash
+    cd infrastructure
     terraform init
 
 3. **Aplique a infraestrutura:**
     ```bash
     terraform apply
 
-4. **Confirme a aplicação das mudanças quando solicitado.**
+4. **Confirme a aplicação das mudanças quando solicitado digitando yes.**
+    ```bash
+    Do you want to perform these actions?
+    Terraform will perform the actions described above.
+    Only 'yes' will be accepted to approve.
+
+    Enter a value: yes
 
 5. **Rode o script para inserir dados na tabela.**
     ```bash
@@ -69,30 +76,35 @@ Inicialize o Terraform no diretório onde o arquivo main.tf está localizado:
     ```bash
     aws --endpoint-url=http://localhost:4566 apigateway get-rest-apis
 
-A resposta será algo como o exemplo abaixo. O id que queremos está na propriedade id (fbcf5neikk)
-    ```bash
-    {
-    "items": [
-        {
-            "id": "fbcf5neikk",
-            "name": "TransactionsAPI",
-            "description": "API Gateway for Transactions",
-            "createdDate": "2025-02-11T15:17:36-03:00",
-            "apiKeySource": "HEADER",
-            "endpointConfiguration": {
-                "types": [
-                    "EDGE"
-                ]
-            },
+- A resposta será algo como o exemplo abaixo. O id que queremos está na propriedade `id` (no exemplo, `fbcf5neikk`):
+
+   ```json
+   {
+     "items": [
+       {
+         "id": "fbcf5neikk",
+         "name": "TransactionsAPI",
+         "description": "API Gateway for Transactions",
+         "createdDate": "2025-02-11T15:17:36-03:00",
+         "apiKeySource": "HEADER",
+         "endpointConfiguration": {
+           "types": [
+             "EDGE"
+           ]
+         }
+       }
+     ]
+   }
+  ```
 
 7. **Testes das rotas da api usando cURL.**
-Listar transações
+- Listar transações
     ```bash
-    curl -X GET "http://localhost:4566/restapis/<SEU-ID-AQUI>/dev/_user_request_/transactions?userId=user-123&limit=10"
+    curl -X GET "http://localhost:4566/restapis/<ID-DA-API-DO-PASSO-6>/dev/_user_request_/transactions?userId=user-123&limit=10"
 
-Criar transação
+- Criar transação
     ```bash
-    curl -v -X POST "http://localhost:4566/restapis/<SEU-ID-AQUI>/dev/_user_request_/transactions" \
+    curl -v -X POST "http://localhost:4566/restapis/<ID-DA-API-DO-PASSO-6>/dev/_user_request_/transactions" \
     -H "Content-Type: application/json" \
     -d '{
     "userId": "user-123",
@@ -100,6 +112,6 @@ Criar transação
     "description": "Test transaction"
     }'
 
-Calcular saldo do mês de referencia
+- Calcular saldo do mês de referencia
     ```bash
     curl -X GET "http://localhost:4566/restapis/fbcf5neikk/dev/_user_request_/balance?userId=user-123&month=2025-02"
