@@ -66,8 +66,9 @@ Inicialize o Terraform no diretório infrastructure:
     ```bash
     terraform apply
 
-4. **Rode o script para inserir dados na tabela na raiz do projeto.**
+4. **Rode o script para inserir dados na tabela (na raiz do projeto).**
     ```bash
+    cd ..
     node seed.js
 
 5. **Pegue o id da api para podermos fazer testes das rotas.**
