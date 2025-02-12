@@ -7,8 +7,7 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "test": "jest",
-    "build-and-package": "npm run build && mkdir -p deployment && zip -r deployment/package.zip dist node_modules package.json -x 'node_modules/aws-sdk/*' 'infrastructure/*' 'src/*' '*.test.js' '*.config.js' 'README.md'",
-    "build-and-package-old": "npm run build && mkdir -p deployment && zip -r deployment/package.zip dist package.json"
+    "build-and-package": "npm run build && mkdir -p deployment && zip -r deployment/package.zip dist node_modules package.json -x 'node_modules/aws-sdk/*' 'infrastructure/*' 'src/*' '*.test.ts' '*.config.js' 'README.md'"
   },
   "keywords": [],
   "author": "",
