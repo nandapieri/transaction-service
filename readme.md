@@ -42,7 +42,7 @@ Configure seus comandos AWS CLI para apontar para o LocalStack:
     aws configure set aws_secret_access_key dummy
     aws configure set region us-east-1
 
-## Subir a aplicação
+## Subir a aplicação e testar
 
 1. **Empacotar para implantação:**
 Crie um pacote zip para implantação na AWS Lambda:

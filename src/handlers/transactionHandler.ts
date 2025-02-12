@@ -1,22 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda";
 import * as TransactionDomain from "../domains/transaction";
-import { DynamoDBClient, ListTablesCommand } from "@aws-sdk/client-dynamodb";
-
-async function testDynamoDBConnection() {
-    const client = new DynamoDBClient({
-      region: 'us-east-1',
-      endpoint: 'http://host.docker.internal:4566',
-    });
-    const command = new ListTablesCommand({});
-    try {
-      const results = await client.send(command);
-      console.log('Tabelas disponíveis:', results.TableNames);
-    } catch (error) {
-      console.error('Erro ao conectar ao DynamoDB:', error);
-      throw error; // Para capturar e logar erros nas funções Lambda
-    }
-  }
-    
+   
 const handlePostTransaction = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   if (!event.body) {
     return {
@@ -32,9 +16,6 @@ const handlePostTransaction = async (event: APIGatewayProxyEvent): Promise<APIGa
     };
   }
   const transaction = await TransactionDomain.registerTransaction(userId, amount, description);
-  console.log("TRANSACTION REGISTERED");
-  console.log("*********************************************************************");
-  console.log(JSON.stringify(transaction));
   return {
     statusCode: 201,
     body: JSON.stringify(transaction),
@@ -53,9 +34,6 @@ const handleGetTransactions = async (event: APIGatewayProxyEvent): Promise<APIGa
   for await (const batch of TransactionDomain.listTransactions(userId, parseInt(limit, 10))) {
     transactions.push(...batch);
   }
-  console.log("TRANSACTIONS");
-  console.log("*********************************************************************");
-  console.log(transactions);
   return {
     statusCode: 200,
     body: JSON.stringify(transactions),
@@ -71,8 +49,6 @@ const handleGetBalance = async (event: APIGatewayProxyEvent): Promise<APIGateway
     };
   }
   const balance = await TransactionDomain.calculateBalance(userId, month);
-  console.log("BALANCE", balance);
-  console.log("*********************************************************************");
   return {
     statusCode: 200,
     body: JSON.stringify({ balance }),
@@ -82,12 +58,6 @@ const handleGetBalance = async (event: APIGatewayProxyEvent): Promise<APIGateway
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const { httpMethod, path } = event;
 
-  console.log("API CALL");
-  console.log("*********************************************************************");
-  console.log("EVENTO: ", JSON.stringify(event));
-
-  await testDynamoDBConnection();
-
   const routeHandlers: { [key: string]: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult> } = {
     "POST /transactions": handlePostTransaction,
     "GET /transactions": handleGetTransactions,
@@ -95,8 +65,6 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   };
 
   const routeKey = `${httpMethod} ${path}`;
-  console.log("*********************************************************************");
-  console.log("routeKey: ", routeKey);
   const handlerFunction = routeHandlers[routeKey];
 
   if (handlerFunction) {
