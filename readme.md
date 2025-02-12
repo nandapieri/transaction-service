@@ -115,3 +115,10 @@ Inicialize o Terraform no diretório infrastructure:
 - Calcular saldo do mês de referencia
     ```bash
     curl -X GET "http://localhost:4566/restapis/fbcf5neikk/dev/_user_request_/balance?userId=user-123&month=2025-02"
+
+## Planejamento do streaming para RDS
+
+[Diagrama arquitetural](https://drive.google.com/file/d/1ohVz54OL07eXW73-VvQErK242YSZHXmB/view)
+
+[Descrição textual dos serviços](https://drive.google.com/file/d/15c_m3PdJHmEkrjEueLn0ONxvjiOXwRCj/view?usp=drive_link).
+
