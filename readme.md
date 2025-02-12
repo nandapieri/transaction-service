@@ -99,11 +99,11 @@ Inicialize o Terraform no diretório infrastructure:
 6. **Testes das rotas da api usando cURL.**
 - Listar transações
     ```bash
-    curl -X GET "http://localhost:4566/restapis/<ID-DA-API-DO-PASSO-6>/dev/_user_request_/transactions?userId=user-123&limit=10"
+    curl -X GET "http://localhost:4566/restapis/<ID-DA-API-DO-PASSO-5>/dev/_user_request_/transactions?userId=user-123&limit=10"
 
 - Criar transação
     ```bash
-    curl -v -X POST "http://localhost:4566/restapis/<ID-DA-API-DO-PASSO-6>/dev/_user_request_/transactions" \
+    curl -v -X POST "http://localhost:4566/restapis/<ID-DA-API-DO-PASSO-5>/dev/_user_request_/transactions" \
     -H "Content-Type: application/json" \
     -d '{
     "userId": "user-123",
@@ -113,7 +113,7 @@ Inicialize o Terraform no diretório infrastructure:
 
 - Calcular saldo do mês de referencia
     ```bash
-    curl -X GET "http://localhost:4566/restapis/<ID-DA-API-DO-PASSO-6>/dev/_user_request_/balance?userId=user-123&month=2025-02"
+    curl -X GET "http://localhost:4566/restapis/<ID-DA-API-DO-PASSO-5>/dev/_user_request_/balance?userId=user-123&month=2025-02"
 
 ## Planejamento do streaming para RDS
 
