@@ -41,6 +41,12 @@ Configure seus comandos AWS CLI para apontar para o LocalStack:
     aws configure set aws_access_key_id dummy
     aws configure set aws_secret_access_key dummy
     aws configure set region us-east-1
+    export AWS_ENDPOINT_URL="http://localhost:4566"
+
+2. Crie os secrets no AWS Secrets Manager.
+Precisaremos deles para aplicar a infraestrutura:
+    ```bash
+    aws secretsmanager create-secret --name MyApp/EnvironmentVariables --secret-string '{"AWS_ACCESS_KEY_ID":"dummy","AWS_SECRET_ACCESS_KEY":"dummy"}' --endpoint-url http://localhost:4566
 
 ## Subir a aplicação e testar
 
@@ -60,19 +66,11 @@ Inicialize o Terraform no diretório infrastructure:
     ```bash
     terraform apply
 
-4. **Confirme a aplicação das mudanças quando solicitado digitando yes.**
-    ```bash
-    Do you want to perform these actions?
-    Terraform will perform the actions described above.
-    Only 'yes' will be accepted to approve.
-
-    Enter a value: yes
-
-5. **Rode o script para inserir dados na tabela.**
+4. **Rode o script para inserir dados na tabela na raiz do projeto.**
     ```bash
     node seed.js
 
-6. **Pegue o id da api para podermos fazer testes das rotas.**
+5. **Pegue o id da api para podermos fazer testes das rotas.**
     ```bash
     aws --endpoint-url=http://localhost:4566 apigateway get-rest-apis
 
@@ -97,7 +95,7 @@ Inicialize o Terraform no diretório infrastructure:
    }
   ```
 
-7. **Testes das rotas da api usando cURL.**
+6. **Testes das rotas da api usando cURL.**
 - Listar transações
     ```bash
     curl -X GET "http://localhost:4566/restapis/<ID-DA-API-DO-PASSO-6>/dev/_user_request_/transactions?userId=user-123&limit=10"
@@ -114,7 +112,7 @@ Inicialize o Terraform no diretório infrastructure:
 
 - Calcular saldo do mês de referencia
     ```bash
-    curl -X GET "http://localhost:4566/restapis/fbcf5neikk/dev/_user_request_/balance?userId=user-123&month=2025-02"
+    curl -X GET "http://localhost:4566/restapis/<ID-DA-API-DO-PASSO-6>/dev/_user_request_/balance?userId=user-123&month=2025-02"
 
 ## Planejamento do streaming para RDS
 

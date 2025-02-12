@@ -1,14 +1,21 @@
 provider "aws" {
   region                      = "us-east-1"
-  access_key                  = "dummy"
-  secret_key                  = "dummy"
   skip_credentials_validation = true
   skip_requesting_account_id  = true
   endpoints {
     dynamodb = "http://localhost:4566"
     lambda   = "http://localhost:4566"
     apigateway = "http://localhost:4566"
+    secretsmanager = "http://localhost:4566"
   }
+}
+
+data "aws_secretsmanager_secret_version" "my_secrets" {
+  secret_id = "MyApp/EnvironmentVariables"
+}
+
+locals {
+  secret_values = jsondecode(data.aws_secretsmanager_secret_version.my_secrets.secret_string)
 }
 
 resource "aws_dynamodb_table" "transactions" {
@@ -39,22 +46,55 @@ resource "aws_dynamodb_table" "transactions" {
   }
 }
 
+resource "aws_iam_role" "lambda_role" {
+  name = "lambda-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "lambda_policy" {
+  role = aws_iam_role.lambda_role.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "secretsmanager:GetSecretValue",
+          "dynamodb:*"
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 resource "aws_lambda_function" "transaction_handler" {
   function_name = "transactionHandler"
   handler       = "dist/handlers/transactionHandler.handler"
   runtime       = "nodejs18.x"
   filename      = "${path.module}/../deployment/package.zip"
-  role          = "arn:aws:iam::000000000000:role/lambda-role"
+  role          = aws_iam_role.lambda_role.arn
 
   environment {
     variables = {
-      DYNAMODB_TABLE = aws_dynamodb_table.transactions.name,
-      AWS_ENDPOINT_URL = "http://host.docker.internal:4566"
-      AWS_ACCESS_KEY_ID = "dummy"
-      AWS_SECRET_ACCESS_KEY = "dummy"
+      DYNAMODB_TABLE        = aws_dynamodb_table.transactions.name
+      AWS_ENDPOINT_URL      = "http://host.docker.internal:4566"
+      AWS_ACCESS_KEY_ID     = local.secret_values.AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY = local.secret_values.AWS_SECRET_ACCESS_KEY
     }
   }
-
 }
 
 resource "aws_api_gateway_rest_api" "transactions_api" {
